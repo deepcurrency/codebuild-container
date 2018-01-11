@@ -50,15 +50,12 @@ RUN wget "https://bootstrap.pypa.io/get-pip.py" -O /tmp/get-pip.py \
     && pip install awscli==1.11.157 \
     && rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp/* 
  
-
 ENV DOCKER_BUCKET="download.docker.com" \
     DOCKER_VERSION="17.09.0-ce" \
     DOCKER_CHANNEL="stable" \
     DOCKER_SHA256="a9e90a73c3cdfbf238f148e1ec0eaff5eb181f92f35bdd938fd7dab18e1c4647" \
     DIND_COMMIT="3b5fac462d21ca164b3778647420016315289034" \
     DOCKER_COMPOSE_VERSION="1.16.1"
-
-COPY dockerd-entrypoint.sh /usr/local/bin/
 
 # From the docker:17.09
 RUN set -x \
@@ -120,5 +117,8 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
   && tar -xJf "node-v$NODE_VERSION-linux-$ARCH.tar.xz" -C /usr/local --strip-components=1 --no-same-owner \
   && rm "node-v$NODE_VERSION-linux-$ARCH.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt \
   && ln -s /usr/local/bin/node /usr/local/bin/nodejs
+
+COPY dockerd-entrypoint.sh /usr/local/bin/
+COPY github.sh /usr/local/bin/
 
 ENTRYPOINT ["dockerd-entrypoint.sh"]
