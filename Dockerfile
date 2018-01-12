@@ -121,3 +121,4 @@ RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
 COPY dockerd-entrypoint.sh /usr/local/bin/
 COPY github.sh /usr/local/bin/
 
+ENTRYPOINT ["dockerd-entrypoint.sh"]
