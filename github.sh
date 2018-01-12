@@ -1,11 +1,8 @@
 #!/bin/bash
 
-export CI=true
-export CODEBUILD=true
-
 export CODEBUILD_GIT_BRANCH=`git symbolic-ref HEAD --short 2>/dev/null`
 if [ "$CODEBUILD_GIT_BRANCH" == "" ] ; then
-  CODEBUILD_GIT_BRANCH=`git branch -a --contains HEAD | sed -n 2p | awk '{ printf $1 }'`
+  CODEBUILD_GIT_BRANCH=`git branch -a --contains HEAD | sed -n 2p | awk '{ printf $2 }'`
   export CODEBUILD_GIT_BRANCH=${CODEBUILD_GIT_BRANCH#remotes/origin/}
 fi
 
@@ -24,8 +21,6 @@ export CODEBUILD_PROJECT=${CODEBUILD_BUILD_ID%:$CODEBUILD_LOG_PATH}
 export CODEBUILD_BUILD_URL=https://$AWS_DEFAULT_REGION.console.aws.amazon.com/codebuild/home?region=$AWS_DEFAULT_REGION#/builds/$CODEBUILD_BUILD_ID/view/new
 
 echo "==> AWS CodeBuild Extra Environment Variables:"
-echo "==> CI = $CI"
-echo "==> CODEBUILD = $CODEBUILD"
 echo "==> CODEBUILD_GIT_AUTHOR = $CODEBUILD_GIT_AUTHOR"
 echo "==> CODEBUILD_GIT_AUTHOR_EMAIL = $CODEBUILD_GIT_AUTHOR_EMAIL"
 echo "==> CODEBUILD_GIT_BRANCH = $CODEBUILD_GIT_BRANCH "
